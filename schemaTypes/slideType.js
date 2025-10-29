@@ -31,12 +31,12 @@ export const slideType = defineType({
       options: {
         list: [
           {title: 'Pros & Cons', value: 'proscons'},
+          {title: 'Slide list', value: 'slides'},
           {title: 'List', value: 'list'},
           {title: 'WYSIWYG', value: 'block'},
         ],
         layout: 'radio',
       },
-      validation: (Rule) => Rule.required(),
     }),
 
     defineField({
@@ -48,9 +48,103 @@ export const slideType = defineType({
       hidden: ({parent}) => parent?.contentType !== 'proscons',
       validation: (Rule) => Rule.max(3).error('You can only have up to 3 sections'),
     }),
-
     defineField({
-      name: 'list',
+      name: 'lists',
+      title: 'Lists',
+      type: 'array',
+      hidden: ({parent}) => parent?.contentType !== 'list',
+      validation: (Rule) => Rule.max(3).error('You can only have up to 3 lists'),
+      of: [
+        {
+          type: 'object',
+          name: 'listItemGroup',
+          title: 'List',
+          fields: [
+            {
+              name: 'listTitle',
+              title: 'Title',
+              description: 'This will appear above the list',
+              type: 'string',
+              validation: (Rule) => Rule.required().error('Each list needs a title'),
+            },
+            {
+              name: 'contentType',
+              title: 'Content Type',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'List Items', value: 'items'},
+                  {title: 'Image Gallery', value: 'images'},
+                ],
+                layout: 'radio',
+              },
+              validation: (Rule) => Rule.required(),
+              initialValue: 'items',
+            },
+            // List items (max 5)
+            {
+              name: 'items',
+              title: 'Items',
+              type: 'array',
+              of: [{type: 'string'}],
+              hidden: ({parent}) => parent?.contentType !== 'items',
+              validation: (Rule) => Rule.max(5).error('A list can have at most 5 items'),
+            },
+            // Image gallery (max 3)
+            {
+              name: 'images',
+              title: 'Images',
+              type: 'array',
+              hidden: ({parent}) => parent?.contentType !== 'images',
+              validation: (Rule) => Rule.max(3).error('You can only upload up to 3 images'),
+              of: [
+                {
+                  type: 'object',
+                  title: 'Image item',
+                  fields: [
+                    {
+                      name: 'title',
+                      type: 'string',
+                      title: 'Title',
+                      initialValue: 'Image',
+                      hidden: true,
+                    },
+                    {
+                      name: 'image',
+                      type: 'image',
+                      options: {hotspot: true},
+                      fields: [
+                        {
+                          name: 'alt',
+                          type: 'string',
+                          title: 'Alt text',
+                          validation: (Rule) =>
+                            Rule.required().error('Alt text is required for accessibility'),
+                        },
+                        {
+                          name: 'caption',
+                          type: 'string',
+                          title: 'Caption',
+                          description: 'Optional',
+                        },
+                      ],
+                    },
+                  ],
+                  preview: {
+                    select: {
+                      title: 'title',
+                      media: 'image',
+                    },
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'slideList',
       title: 'List',
       type: 'array',
       // array of type strings!
@@ -60,7 +154,7 @@ export const slideType = defineType({
           to: [{type: 'slide'}], // 'slide' is the schema name of your slide documents
         },
       ],
-      hidden: ({parent}) => parent?.contentType !== 'list',
+      hidden: ({parent}) => parent?.contentType !== 'slides',
     }),
 
     // Important to import https://www.npmjs.com/package/@portabletext/to-html into the frontend for wysiwyg's

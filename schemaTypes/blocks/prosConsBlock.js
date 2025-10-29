@@ -35,6 +35,12 @@ export const prosConsBlock = {
           fields: [
             {name: 'listItem', title: 'Pro', type: 'string', validation: (Rule) => Rule.required()},
             {name: 'description', title: 'Description', type: 'text', rows: 3},
+            {
+              name: 'image',
+              title: 'Image (optional)',
+              type: 'image',
+              options: {hotspot: true},
+            },
           ],
           preview: {select: {title: 'listItem', subtitle: 'description'}},
         },
@@ -54,6 +60,12 @@ export const prosConsBlock = {
           fields: [
             {name: 'listItem', title: 'Con', type: 'string', validation: (Rule) => Rule.required()},
             {name: 'description', title: 'Description', type: 'text', rows: 3},
+            {
+              name: 'image',
+              title: 'Image (optional)',
+              type: 'image',
+              options: {hotspot: true},
+            },
           ],
           preview: {select: {title: 'listItem', subtitle: 'description'}},
         },

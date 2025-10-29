@@ -9,9 +9,9 @@ export const presentationType = defineType({
     defineField({
       name: 'title',
       title: 'Presentation Title',
-      description: "Title of the presentation",
+      description: 'Title of the presentation',
       type: 'string',
-      validation: (Rule) => Rule.required().error("A presentation requires a title"),
+      validation: (Rule) => Rule.required().error('A presentation requires a title'),
     }),
     defineField({
       name: 'slug',
