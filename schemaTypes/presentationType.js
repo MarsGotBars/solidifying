@@ -1,5 +1,5 @@
 // schemas/presentationType.js
-import { defineField, defineType } from 'sanity'
+import {defineField, defineType} from 'sanity'
 
 export const presentationType = defineType({
   name: 'presentation',
@@ -36,19 +36,20 @@ export const presentationType = defineType({
       name: 'slides',
       title: 'Slides',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'slide' }] }],
-      options: { sortable: true },
+      of: [{type: 'reference', to: [{type: 'slide'}]}],
+      options: {sortable: true},
     }),
   ],
   preview: {
     select: {
       title: 'title',
-      slideCount: 'slides.length',
+      slides: 'slides', // get the array
     },
-    prepare({ title, slideCount }) {
+    prepare({title, slides}) {
+      const slideCount = slides?.length || 0
       return {
-        title: title,
-        subtitle: `${slideCount || 0} slide${slideCount === 1 ? '' : 's'}`,
+        title,
+        subtitle: `${slideCount} slide${slideCount === 1 ? '' : 's'}`,
       }
     },
   },
