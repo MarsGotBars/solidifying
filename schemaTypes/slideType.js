@@ -16,6 +16,19 @@ export const slideType = defineType({
       // we can mark it as required and show a custom error text in case it's not filled-in
       validation: (Rule) => Rule.required().error('Every slide needs a title'),
     }),
+    
+    defineField({
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      description: 'Used in the URL',
+      options: {
+        source: 'title',
+        maxLength: 96,
+      },
+      validation: (Rule) => Rule.required(),
+      hidden: ({document}) => !document?.title,
+    }),
 
     defineField({
       name: 'subtitle',
