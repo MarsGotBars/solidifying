@@ -43,11 +43,13 @@ export const slideType = defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Pros & Cons', value: 'proscons'},
-          {title: 'Slide list', value: 'slides'},
-          {title: 'List', value: 'list'},
-          {title: 'WYSIWYG', value: 'block'},
+          {title: 'None', value: '-'},
+          {title: 'Pros & Cons', value: 'prosConsBlocks'},
+          {title: 'Slide list', value: 'slideList'},
+          {title: 'List', value: 'lists'},
+          {title: 'WYSIWYG', value: 'content'},
         ],
+        initialValue: '-',
         layout: 'radio',
       },
     }),
@@ -58,14 +60,14 @@ export const slideType = defineType({
       type: 'array',
       //
       of: [prosConsBlock],
-      hidden: ({parent}) => parent?.contentType !== 'proscons',
+      hidden: ({parent}) => parent?.contentType !== 'prosConsBlocks',
       validation: (Rule) => Rule.max(3).error('You can only have up to 3 sections'),
     }),
     defineField({
       name: 'lists',
       title: 'Lists',
       type: 'array',
-      hidden: ({parent}) => parent?.contentType !== 'list',
+      hidden: ({parent}) => parent?.contentType !== 'lists',
       validation: (Rule) => Rule.max(3).error('You can only have up to 3 lists'),
       of: [
         {
@@ -167,7 +169,7 @@ export const slideType = defineType({
           to: [{type: 'slide'}], // 'slide' is the schema name of your slide documents
         },
       ],
-      hidden: ({parent}) => parent?.contentType !== 'slides',
+      hidden: ({parent}) => parent?.contentType !== 'slideList',
     }),
 
     // Important to import https://www.npmjs.com/package/@portabletext/to-html into the frontend for wysiwyg's
@@ -207,7 +209,7 @@ export const slideType = defineType({
           },
         },
       ],
-      hidden: ({parent}) => parent?.contentType !== 'block',
+      hidden: ({parent}) => parent?.contentType !== 'content',
     }),
 
     defineField({
